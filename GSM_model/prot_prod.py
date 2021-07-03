@@ -1,3 +1,15 @@
+'''
+Th idea for this program is to allow people to introduce any kind of sequence they have from their protein of interest,
+and from that sequence get the remaining sequences that we need (DNA, RNA, amino acids sequence) and introduce the obtained
+information/proportion of each molecule into our sbml model automatically, before optimizing it.
+Therefore, if they introduce the DNA sequence, we need to be able to get the RNA sequence and the protein sequence, using 
+probably some tool similar to the Virtual Ribosome. And we need to consider codon optimization!
+Otherwise, if what they introduce is already the protein sequence with the amino acids, we need to be able to reverse
+transcribe, considering the codon optimization as well.
+Maybe, we could have some check into the DNA/RNA sequence introduced by the user to check if it is codon optimized and 
+in case it is not automatically codon optimize it informing the user or ask the user if they want to codon optimize it?
+'''
+
 import sys 
 
 # define the molecular weight for each nucleotide, ribonucleotide and aa (obtained from excel)
