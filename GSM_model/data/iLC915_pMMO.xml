@@ -31410,7 +31410,7 @@
           <groups:member groups:name="Orthophosphate permease" groups:idRef="R_r1392"/>
         </groups:listOfMembers>
       </groups:group>
-      <groups:group groups:id="G_Transport__32__of__32__Protein of interest" groups:name="Transport of Protein of interest" groups:kind="collection">
+      <groups:group groups:id="G_Transport__32__of__32__Protein_of_interest" groups:name="Transport of Protein of interest" groups:kind="collection">
         <groups:listOfMembers>
           <groups:member groups:name="Extracellular transport of Protein of interest" groups:idRef="R_r1338"/>
           <groups:member groups:name="Take out of Protein of interest" groups:idRef="R_r1337"/>
@@ -31492,7 +31492,7 @@
           <groups:member groups:name="Sterols (mmol/g)" groups:idRef="R_r1099"/>
         </groups:listOfMembers>
       </groups:group>
-      <groups:group groups:id="G_Biosynthesis__32__of__32__Protein of interest" groups:name="Biosynthesis of Protein of interest" groups:kind="collection">
+      <groups:group groups:id="G_Biosynthesis__32__of__32__Protein_of_interest" groups:name="Biosynthesis of Protein of interest" groups:kind="collection">
         <groups:listOfMembers>
           <groups:member groups:name="Protein of interest, polymerization of amino acids " groups:idRef="R_r1100"/>
           <groups:member groups:name="Protein of interest, polymerization of deoxynucleotides" groups:idRef="R_r1101"/>
