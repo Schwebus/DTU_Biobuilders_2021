@@ -1370,12 +1370,12 @@
       <species id="M_m1357" name="NH3_" compartment="C_p" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
       <species id="M_m1358" name="L-Alanine_C3H7NO2" compartment="C_e" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
       <species id="M_m1359" name="L-Alanine_C3H7NO3" compartment="C_p" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="M_m1360" name="FABaa_" compartment="C_c" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="M_m1361" name="FABrna_" compartment="C_c" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="M_m1362" name="FABdna_" compartment="C_c" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="M_m1363" name="FAB_" compartment="C_c" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="M_m1364" name="FAB_" compartment="C_e" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="M_m1365" name="FAB_" compartment="C_b" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="M_m1360" name="ProteinOfInterestaa_" compartment="C_c" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="M_m1361" name="ProteinOfInterestrna_" compartment="C_c" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="M_m1362" name="ProteinOfInterestdna_" compartment="C_c" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="M_m1363" name="ProteinOfInterest_" compartment="C_c" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="M_m1364" name="ProteinOfInterest_" compartment="C_e" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="M_m1365" name="ProteinOfInterest_" compartment="C_b" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
       <species id="M_m1366" name="D-Xylulose_" compartment="C_c" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
       <species id="M_m1367" name="D-Arabitol_" compartment="C_c" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
       <species id="M_m1369" name="D-Arabitol_" compartment="C_e" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
@@ -27629,10 +27629,10 @@
           </fbc:or>
         </fbc:geneProductAssociation>
       </reaction>
-      <reaction id="R_r1338" name="Extracellular transport of FAB" reversible="false" fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="cobra_default_ub">
+      <reaction id="R_r1338" name="Extracellular transport of Protein of interest" reversible="false" fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="cobra_default_ub">
         <notes>
           <html xmlns="http://www.w3.org/1999/xhtml">
-            <p>SUBSYSTEM: Transport of FAB</p>
+            <p>SUBSYSTEM: Transport of Protein of interest</p>
           </html>
         </notes>
         <listOfReactants>
@@ -28387,10 +28387,10 @@
           <speciesReference species="M_m1267" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R_r1337" name="Take out of FAB" reversible="false" fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="cobra_default_ub">
+      <reaction id="R_r1337" name="Take out of Protein of interest" reversible="false" fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="cobra_default_ub">
         <notes>
           <html xmlns="http://www.w3.org/1999/xhtml">
-            <p>SUBSYSTEM: Transport of FAB</p>
+            <p>SUBSYSTEM: Transport of Protein of interest</p>
           </html>
         </notes>
         <listOfReactants>
@@ -28593,10 +28593,10 @@
           <speciesReference species="M_m1338" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R_r1100" name="FAB, polymerization of amino acids " reversible="false" fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="cobra_default_ub">
+      <reaction id="R_r1100" name="Protein of interest, polymerization of amino acids " reversible="false" fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="cobra_default_ub">
         <notes>
           <html xmlns="http://www.w3.org/1999/xhtml">
-            <p>SUBSYSTEM: Biosynthesis of FAB</p>
+            <p>SUBSYSTEM: Biosynthesis of Protein of interest</p>
           </html>
         </notes>
         <listOfReactants>
@@ -28629,10 +28629,10 @@
           <speciesReference species="M_m1360" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R_r1101" name="FAB, polymerization of deoxynucleotides" reversible="false" fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="cobra_default_ub">
+      <reaction id="R_r1101" name="Protein of interest, polymerization of deoxynucleotides" reversible="false" fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="cobra_default_ub">
         <notes>
           <html xmlns="http://www.w3.org/1999/xhtml">
-            <p>SUBSYSTEM: Biosynthesis of FAB</p>
+            <p>SUBSYSTEM: Biosynthesis of Protein of interest</p>
           </html>
         </notes>
         <listOfReactants>
@@ -28649,10 +28649,10 @@
           <speciesReference species="M_m1362" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R_r1102" name="FAB biosynthesis" reversible="false" fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="cobra_default_ub">
+      <reaction id="R_r1102" name="Protein of interest biosynthesis" reversible="false" fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="cobra_default_ub">
         <notes>
           <html xmlns="http://www.w3.org/1999/xhtml">
-            <p>SUBSYSTEM: Biosynthesis of FAB</p>
+            <p>SUBSYSTEM: Biosynthesis of Protein of interest</p>
           </html>
         </notes>
         <listOfReactants>
@@ -28664,10 +28664,10 @@
           <speciesReference species="M_m1363" stoichiometry="1" constant="true"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R_r1103" name="FAB, polymerization of nucleotides" reversible="false" fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="cobra_default_ub">
+      <reaction id="R_r1103" name="Protein of interest, polymerization of nucleotides" reversible="false" fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="cobra_default_ub">
         <notes>
           <html xmlns="http://www.w3.org/1999/xhtml">
-            <p>SUBSYSTEM: Biosynthesis of FAB</p>
+            <p>SUBSYSTEM: Biosynthesis of Protein of interest</p>
           </html>
         </notes>
         <listOfReactants>
@@ -31410,10 +31410,10 @@
           <groups:member groups:name="Orthophosphate permease" groups:idRef="R_r1392"/>
         </groups:listOfMembers>
       </groups:group>
-      <groups:group groups:id="G_Transport__32__of__32__FAB" groups:name="Transport of FAB" groups:kind="collection">
+      <groups:group groups:id="G_Transport__32__of__32__Protein of interest" groups:name="Transport of Protein of interest" groups:kind="collection">
         <groups:listOfMembers>
-          <groups:member groups:name="Extracellular transport of FAB" groups:idRef="R_r1338"/>
-          <groups:member groups:name="Take out of FAB" groups:idRef="R_r1337"/>
+          <groups:member groups:name="Extracellular transport of Protein of interest" groups:idRef="R_r1338"/>
+          <groups:member groups:name="Take out of Protein of interest" groups:idRef="R_r1337"/>
         </groups:listOfMembers>
       </groups:group>
       <groups:group groups:id="G_Exchange__32__reaction" groups:name="Exchange reaction" groups:kind="collection">
@@ -31492,12 +31492,12 @@
           <groups:member groups:name="Sterols (mmol/g)" groups:idRef="R_r1099"/>
         </groups:listOfMembers>
       </groups:group>
-      <groups:group groups:id="G_Biosynthesis__32__of__32__FAB" groups:name="Biosynthesis of FAB" groups:kind="collection">
+      <groups:group groups:id="G_Biosynthesis__32__of__32__Protein of interest" groups:name="Biosynthesis of Protein of interest" groups:kind="collection">
         <groups:listOfMembers>
-          <groups:member groups:name="FAB, polymerization of amino acids " groups:idRef="R_r1100"/>
-          <groups:member groups:name="FAB, polymerization of deoxynucleotides" groups:idRef="R_r1101"/>
-          <groups:member groups:name="FAB biosynthesis" groups:idRef="R_r1102"/>
-          <groups:member groups:name="FAB, polymerization of nucleotides" groups:idRef="R_r1103"/>
+          <groups:member groups:name="Protein of interest, polymerization of amino acids " groups:idRef="R_r1100"/>
+          <groups:member groups:name="Protein of interest, polymerization of deoxynucleotides" groups:idRef="R_r1101"/>
+          <groups:member groups:name="Protein of interest biosynthesis" groups:idRef="R_r1102"/>
+          <groups:member groups:name="Protein of interest, polymerization of nucleotides" groups:idRef="R_r1103"/>
         </groups:listOfMembers>
       </groups:group>
       <groups:group groups:id="G_GrowthRate" groups:name="GrowthRate" groups:kind="collection">
