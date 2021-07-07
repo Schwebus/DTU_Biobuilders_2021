@@ -28823,7 +28823,6 @@
 	  <reaction id="R_methane_uptake" name="uptake of methane" reversible="false" fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="R_methane_uptake_upper_bound">
         <notes>
           <html xmlns="http://www.w3.org/1999/xhtml">
-            <p></p>
           </html>
         </notes>
         <listOfReactants>
@@ -28836,12 +28835,12 @@
       <reaction id="R_pMMO" name="pmmo" reversible="false" fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="cobra_default_ub">
         <notes>
           <html xmlns="http://www.w3.org/1999/xhtml">
-            <p></p>
+            <p>GENE_ASSOCIATION: (pmmo_a_gene)</p>
           </html>
         </notes>
         <listOfReactants>
           <speciesReference species="methane_e" stoichiometry="1" constant="true"/>
-		  <speciesReference species="M_m1232" stoichiometry="1" constant="true"/>	  
+		  <speciesReference species="M_m1232" stoichiometry="1" constant="true"/>		  
         </listOfReactants>
         <listOfProducts>
           <speciesReference species="M_m1215" stoichiometry="1" constant="true"/>
@@ -28852,7 +28851,7 @@
     <fbc:listOfObjectives fbc:activeObjective="obj">
       <fbc:objective fbc:id="obj" fbc:type="maximize">
         <fbc:listOfFluxObjectives>
-		  <fbc:fluxObjective fbc:reaction="R_r1339" fbc:coefficient="1"/>
+          <fbc:fluxObjective fbc:reaction="R_r1339" fbc:coefficient="1"/>
         </fbc:listOfFluxObjectives>
       </fbc:objective>
     </fbc:listOfObjectives>
@@ -29772,7 +29771,10 @@
       <fbc:geneProduct fbc:id="G_PAS_chr2__45__1_0235" fbc:name="PAS_chr2-1_0235" fbc:label="G_PAS_chr2__45__1_0235"/>
       <fbc:geneProduct fbc:id="G_PAS_chr4_0337" fbc:name="PAS_chr4_0337" fbc:label="G_PAS_chr4_0337"/>
       <fbc:geneProduct fbc:id="G_PAS_chr2__45__1_0489" fbc:name="PAS_chr2-1_0489" fbc:label="G_PAS_chr2__45__1_0489"/>
-    </fbc:listOfGeneProducts>
+	  <fbc:geneProduct fbc:id="G_pmmo_a_gene" fbc:name="G_pmmo_a_gene" fbc:label="G_pmmo_a_gene"/> 
+	  <fbc:geneProduct fbc:id="G_pmmo_b_gene" fbc:name="G_pmmo_b_gene" fbc:label="G_pmmo_b_gene"/> 
+	  <fbc:geneProduct fbc:id="G_pmmo_c_gene" fbc:name="G_pmmo_c_gene" fbc:label="G_pmmo_c_gene"/> 
+	</fbc:listOfGeneProducts>
     <groups:listOfGroups>
       <groups:group groups:id="G_Glycolysis__32____47____32__Gluconeogenesis" groups:name="Glycolysis / Gluconeogenesis" groups:kind="collection">
         <groups:listOfMembers>
