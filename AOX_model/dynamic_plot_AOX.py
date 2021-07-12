@@ -1,6 +1,9 @@
 import scipy as sp
+import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import odeint
+import time
+from matplotlib.lines import Line2D
 
 
 ###
@@ -40,7 +43,6 @@ deg_mRNA = 1.7e-4        #/s degredation constant of mRNA
 # so 5hrs = 18000s are taken ### we could look up the half life of our particular hemoglobin further
 
 deg_Protein = 1.67e-5      #/s degredation constant of Protein
-
 
 ###
 #Define ODE
@@ -82,7 +84,7 @@ def ODEs(initial_conditions , t):
 #####
 t0 = 0              #Initial time
 t1 = 36000           #Final time
-total =  1000000     #Number of time steps (larger the better)
+total =  10000   #Number of time steps (larger the better)
 
 initial_conditions = [0.0, 0.0]        #set the initial values for [mRNA] and [Protein]
 t = sp.linspace(t0,t1,total)                       #set the array of time values to integrate over
@@ -93,6 +95,7 @@ solution = odeint(ODEs , initial_conditions , t) #Produces an 2d array of soluti
 mRNA = solution[:,0]    #Index all values in first column
 Protein = solution[:,1] #Index all values in second column
 
+simulation_len = len(mRNA)
 
 #####
 #Plot the data
@@ -109,25 +112,55 @@ params = {
 }
 
 plt.rcParams.update(params)
-### Ploting should be made prettier, some of the plt functions dont work with figures
-fig , axs = plt.subplots(2)
-axs[0].plot(t/60 , mRNA, label = "mRNA # of molecules")
-axs[1].plot(t/60 , Protein, label = "Protein # of molecules")
-axs[0].set_title("mRNA # of molecules/time (min)")
-axs[1].set_title("Protein # of molecules/time (min)")
-fig.suptitle("Variation of concentrations with time")
+
+''' Working code for one
 plt.show()
+axes = plt.gca()
+axes.set_xlim(0,36000/60)
+axes.set_ylim(0, 300)
+line_mRNA, = axes.plot([], [], 'r-')
+line_protein, = axes.plot([], [], 'b-')
+### Ploting should be made prettier, some of the plt functions dont work with figures
+#fig , axs = plt.subplots(2)
+for i in range(simulation_len):
+
+    line_mRNA.set_xdata(t[0:i]/60)
+    line_mRNA.set_ydata(mRNA[0:i])
+    #line_protein.set_ydata(Protein[0:i]/1000)
+    plt.draw()
+    plt.pause(1e-17)
+    time.sleep(1e-12)
+plt.show()
+'''
+step = 40
+
+def update_plot(molecule, i, time, values, mole_type):
+    if mole_type == 1:
+        molecule.set_data(time[0:i]/60, values[0:i]/1000)
+    else:
+        molecule.set_data(time[0:i]/60, values[0:i])
+
+data = [mRNA, Protein]
+
+plt.figure()
 plt.title("Variation of concentrations with time")
+colors = ['orange', 'blue']
+lines = [Line2D([0], [0], color=c, linewidth=1) for c in colors]
+labels = ['protein', 'mRNA']
+plt.legend(lines, labels)
 plt.xlabel("time (mins)")
 plt.ylabel("# of molecules")
 plt.grid()
-plt.legend()
-#plt.plot(t/60 , mRNA, label = "mRNA # of molecules")
-#plt.plot(t/60 , Protein, label = "Protein # of molecules")
-#plt.title("Variation of concentrations with time")
-#plt.xlabel("time (mins)")
-#plt.ylabel("# of molecules")
-#plt.grid()
-#plt.legend()
-#plt.show()
-#plt.save('test.png')
+plt.xlabel('time(min)'); plt.ylabel('# molecules')
+plt.axis([0, 36000/60, 0, 300])
+
+molecules_plots = []
+for i in range(2):
+    mol_plot, = plt.plot([],[])
+    molecules_plots.append(mol_plot)
+
+for i in range (0, simulation_len, step):
+    for j, mol_plot in enumerate(molecules_plots):
+        update_plot(mol_plot, i, t, data[j],j)
+    plt.draw()
+    plt.pause(1e-20)
