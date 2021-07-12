@@ -138,3 +138,64 @@ plt.legend()
 #plt.legend()
 #plt.show()
 #plt.save('test.png')
+
+'''
+DYNAMIC PLOTTING
+
+
+#Working code for one figure
+
+plt.show()
+axes = plt.gca()
+axes.set_xlim(0,36000/60)
+axes.set_ylim(0, 300)
+line_mRNA, = axes.plot([], [], 'r-')
+line_protein, = axes.plot([], [], 'b-')
+### Ploting should be made prettier, some of the plt functions dont work with figures
+#fig , axs = plt.subplots(2)
+for i in range(simulation_len):
+
+    line_mRNA.set_xdata(t[0:i]/60)
+    line_mRNA.set_ydata(mRNA[0:i])
+    #line_protein.set_ydata(Protein[0:i]/1000)
+    plt.draw()
+    plt.pause(1e-17)
+    time.sleep(1e-12)
+plt.show()
+
+# Working code for two plots on same figure
+
+step = 40
+
+def update_plot(molecule, i, time, values, mole_type):
+    if mole_type == 1:
+        molecule.set_data(time[0:i]/60, values[0:i]/1000)
+    else:
+        molecule.set_data(time[0:i]/60, values[0:i])
+
+data = [mRNA, Protein]
+
+plt.figure()
+plt.title("Variation of concentrations with time")
+colors = ['orange', 'blue']
+lines = [Line2D([0], [0], color=c, linewidth=1) for c in colors]
+labels = ['protein', 'mRNA']
+plt.legend(lines, labels)
+plt.xlabel("time (mins)")
+plt.ylabel("# of molecules")
+plt.grid()
+plt.xlabel('time(min)'); plt.ylabel('# molecules')
+plt.axis([0, 36000/60, 0, 300])
+
+molecules_plots = []
+for i in range(2):
+    mol_plot, = plt.plot([],[])
+    molecules_plots.append(mol_plot)
+
+for i in range (0, simulation_len, step):
+    for j, mol_plot in enumerate(molecules_plots):
+        update_plot(mol_plot, i, t, data[j],j)
+    plt.draw()
+    plt.pause(1e-20)
+
+'''
