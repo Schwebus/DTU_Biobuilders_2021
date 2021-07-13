@@ -28823,6 +28823,7 @@
 	  <reaction id="R_methane_uptake" name="uptake of methane" reversible="false" fast="false" fbc:lowerFluxBound="cobra_0_bound" fbc:upperFluxBound="R_methane_uptake_upper_bound">
         <notes>
           <html xmlns="http://www.w3.org/1999/xhtml">
+			<p>SUBSYSTEM: pMMO reaction</p> 
           </html>
         </notes>
         <listOfReactants>
@@ -28846,6 +28847,9 @@
           <speciesReference species="M_m1215" stoichiometry="1" constant="true"/>
 		  <speciesReference species="M_m139" stoichiometry="1" constant="true"/>
         </listOfProducts>
+		<fbc:geneProductAssociation>
+          <fbc:geneProductRef fbc:geneProduct="G_pmmo_a_gene"/>
+        </fbc:geneProductAssociation>
       </reaction>	  
     </listOfReactions>
     <fbc:listOfObjectives fbc:activeObjective="obj">
@@ -29771,9 +29775,9 @@
       <fbc:geneProduct fbc:id="G_PAS_chr2__45__1_0235" fbc:name="PAS_chr2-1_0235" fbc:label="G_PAS_chr2__45__1_0235"/>
       <fbc:geneProduct fbc:id="G_PAS_chr4_0337" fbc:name="PAS_chr4_0337" fbc:label="G_PAS_chr4_0337"/>
       <fbc:geneProduct fbc:id="G_PAS_chr2__45__1_0489" fbc:name="PAS_chr2-1_0489" fbc:label="G_PAS_chr2__45__1_0489"/>
-	  <fbc:geneProduct fbc:id="G_pmmo_a_gene" fbc:name="G_pmmo_a_gene" fbc:label="G_pmmo_a_gene"/> 
-	  <fbc:geneProduct fbc:id="G_pmmo_b_gene" fbc:name="G_pmmo_b_gene" fbc:label="G_pmmo_b_gene"/> 
-	  <fbc:geneProduct fbc:id="G_pmmo_c_gene" fbc:name="G_pmmo_c_gene" fbc:label="G_pmmo_c_gene"/> 
+	  <fbc:geneProduct fbc:id="G_pmmo_a_gene" fbc:name="pmmo_a_gene" fbc:label="G_pmmo_a_gene"/> 
+	  <fbc:geneProduct fbc:id="G_pmmo_b_gene" fbc:name="pmmo_b_gene" fbc:label="G_pmmo_b_gene"/> 
+	  <fbc:geneProduct fbc:id="G_pmmo_c_gene" fbc:name="pmmo_c_gene" fbc:label="G_pmmo_c_gene"/> 
 	</fbc:listOfGeneProducts>
     <groups:listOfGroups>
       <groups:group groups:id="G_Glycolysis__32____47____32__Gluconeogenesis" groups:name="Glycolysis / Gluconeogenesis" groups:kind="collection">

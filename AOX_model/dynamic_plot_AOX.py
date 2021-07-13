@@ -83,7 +83,7 @@ def ODEs(initial_conditions , t):
 #Solving the ODEs
 #####
 t0 = 0              #Initial time
-t1 = 36000           #Final time
+t1 = 360000          #Final time
 total =  10000   #Number of time steps (larger the better)
 
 initial_conditions = [0.0, 0.0]        #set the initial values for [mRNA] and [Protein]
@@ -132,11 +132,12 @@ for i in range(simulation_len):
     time.sleep(1e-12)
 plt.show()
 '''
-step = 40
+
+step = 100
 
 def update_plot(molecule, i, time, values, mole_type):
     if mole_type == 1:
-        molecule.set_data(time[0:i]/60, values[0:i]/1000)
+        molecule.set_data(time[0:i]/60, values[0:i]/2000)
     else:
         molecule.set_data(time[0:i]/60, values[0:i])
 
@@ -152,7 +153,7 @@ plt.xlabel("time (mins)")
 plt.ylabel("# of molecules")
 plt.grid()
 plt.xlabel('time(min)'); plt.ylabel('# molecules')
-plt.axis([0, 36000/60, 0, 300])
+plt.axis([0, t1/60, 0, 1000])
 
 molecules_plots = []
 for i in range(2):

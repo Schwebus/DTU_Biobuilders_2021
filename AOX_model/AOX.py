@@ -81,7 +81,7 @@ def ODEs(initial_conditions , t):
 #Solving the ODEs
 #####
 t0 = 0              #Initial time
-t1 = 36000           #Final time
+t1 = 360000           #Final time
 total =  1000000     #Number of time steps (larger the better)
 
 initial_conditions = [0.0, 0.0]        #set the initial values for [mRNA] and [Protein]
