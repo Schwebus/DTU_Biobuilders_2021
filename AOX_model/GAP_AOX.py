@@ -65,8 +65,8 @@ def ODEs(initial_conditions , t):
 
     leakiness = 0.0000001
 
-   
-    dTF_mRNA_dt = 0.5*ktx*1 - deg_mRNA*TF_mRNA
+   # Lin-Cereghino, G. P., Godfrey, L., de la Cruz, B. J., Johnson, S., Khuongsathiene, S., Tolstorukov, I., ... & Cregg, J. M. (2006). Mxr1p, a key regulator of the methanol utilization pathway and peroxisomal genes in Pichia pastoris. Molecular and cellular biology, 26(3), 883-897. : they measured GAP and AOX activity (b-lactamase expressed under these) in pastoris grown on methanol and AOX is about 50% stronger
+    dTF_mRNA_dt = 0.66*ktx*1 - deg_mRNA*TF_mRNA
     dTF_dt = ktl*TF_mRNA - deg_Protein*TF
     dmRNA_dt =   leakiness + (1-leakiness)*repressor*ktx*(TF**hill_coefficient/(K**hill_coefficient+TF**hill_coefficient)) - deg_mRNA*mRNA  
     dProtein_dt =   ktl*mRNA - deg_Protein*Protein  
@@ -111,7 +111,7 @@ params = {
 
 plt.rcParams.update(params)
 #Plotting needs to be made pretty
-fig , axs = plt.subplots(4)
+fig , axs = plt.subplots(4,constrained_layout=True)
 axs[0].plot(t/60 , TF_mRNA, label = "TF_mRNA # of molecules")
 axs[1].plot(t/60 , TF, label = "TF # of molecules")
 axs[2].plot(t/60 , mRNA, label = "mRNA # of molecules")
