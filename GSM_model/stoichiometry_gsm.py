@@ -111,13 +111,66 @@ def get_stoichiometry(seq, sequence_type, protein_name):
     return mmol_gr_sbml
 
 '''
-dna_stoch = get_stoichiometry(DNA_seq, 'dna', dna_MW)
-rna_stoch = get_stoichiometry(RNA_seq, 'rna', rna_MW)
-aa_stoch = get_stoichiometry(sys.argv[1], 'protein', aa_MW)
-print(dna_stoch)
-print(rna_stoch)
-print(aa_stoch)
+try:
+    input_file = open(original_model_file, 'r')
+    output_file = open(new_model_file, 'w')
+except IOError as err:
+    print("Cant open file:", str(err));
+    sys.exit(1)
 
-# and also add it to sbml_id_to_aa to ensure that when we read them on the file, we can translate the id to the proper species
-sbml_dna['M_m1'] = 'ATP'; sbml_rna['M_m1'] = 'ATP'; sbml_id_to_aa['M_m1'] = 'ATP'
+reaction_flag = False
+
+#dict for cleaner coding
+reaction_dict = {
+    'R_r1100': [aa_stoch, sbml_id_to_aa],
+    'R_r1101': [dna_stoch, sbml_dna],
+    'R_r1103': [rna_stoch, sbml_rna]
+    }
+
+for line in input_file: 
+    
+    #copy file line by line while looking for reaction
+    if not reaction_flag:
+        output_file.write(line)
+        
+        #look for reaction ID's specified in dict
+        for reaction in reaction_dict:
+            if line.find('id="' + reaction) != -1:
+                
+                #when reaction lines found, update flag and dictionaries
+                reaction_flag = True
+                stochiometry_dict = reaction_dict[reaction][0]
+                sbml_ids = reaction_dict[reaction][1]
+    
+
+    #when reaction lines are reached
+    if reaction_flag:
+        
+        #regex group 1 is the species, group 2 is the stoichiometric value
+                           #<speciesReference species="M_m1360" stoichiometry="0.997" constant="true"/>
+        regex = re.search(r'<speciesReference species="(.*)" stoichiometry="(.*)" constant="true"/>', line)
+        if regex:
+            species = regex.group(1)
+            old_stochiometry = regex.group(2)
+            
+            #M_m3, -5 and -7 are all equivalent to M_m1
+            if species in ('M_m3', 'M_m5', 'M_m7'):
+                species = 'M_m1'
+            
+            #don't edit lines with stoic. value of 1
+            if old_stochiometry == "1":
+                output_file.write(line)
+            #rewrite line with new value
+            else:
+                new_stochiometry = str(stochiometry_dict[sbml_ids[species]])
+                print(new_stochiometry)
+                output_file.write(line.replace(old_stochiometry, new_stochiometry))
+        
+        #keep copying file if reaction lines not found
+        else:
+            output_file.write(line)
+            
+            #update flag if end of reaction lines
+            if line.find('</listOfProducts>') != -1:
+                reaction_flag = False
 '''
