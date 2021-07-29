@@ -65,8 +65,10 @@ def ODEs(initial_conditions , t):
 
     leakiness = 0.0000001
 
-   # Lin-Cereghino, G. P., Godfrey, L., de la Cruz, B. J., Johnson, S., Khuongsathiene, S., Tolstorukov, I., ... & Cregg, J. M. (2006). Mxr1p, a key regulator of the methanol utilization pathway and peroxisomal genes in Pichia pastoris. Molecular and cellular biology, 26(3), 883-897. : they measured GAP and AOX activity (b-lactamase expressed under these) in pastoris grown on methanol and AOX is about 50% stronger
-    dTF_mRNA_dt = 0.66*ktx*1 - deg_mRNA*TF_mRNA
+   # Lin-Cereghino, G. P., Godfrey, L., de la Cruz, B. J., Johnson, S., Khuongsathiene, S., Tolstorukov, I., ... & Cregg, J. M. (2006). Mxr1p, a key regulator of the methanol utilization pathway and peroxisomal genes in Pichia pastoris. Molecular and cellular biology, 26(3), 883-897. : they measured GAP and AOX activity (b-lactamase expressed under these) in pastoris grown on methanol and AOX is about 50% stronger.
+   # Waterham, H. R., Digan, M. E., Koutz, P. J., Lair, S. V., & Cregg, J. M. (1997). Isolation of the Pichia pastoris glyceraldehyde-3-phosphate dehydrogenase gene and regulation and use of its promoter. Gene, 186(1), 37-44.
+   # here GAP expression is about 400/770 = 0.51 of that of AOX under 0.5% methanol feeding
+    dTF_mRNA_dt = 0.51*ktx*1 - deg_mRNA*TF_mRNA
     dTF_dt = ktl*TF_mRNA - deg_Protein*TF
     dmRNA_dt =   leakiness + (1-leakiness)*repressor*ktx*(TF**hill_coefficient/(K**hill_coefficient+TF**hill_coefficient)) - deg_mRNA*mRNA  
     dProtein_dt =   ktl*mRNA - deg_Protein*Protein  
