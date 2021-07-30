@@ -102,7 +102,7 @@ initial_conditions = [0.0, 0.0]        #set the initial values for [mRNA] and [P
 t = sp.linspace(t0,t1,total)                       #set the array of time values to integrate over
 
 
-methanol_concentrations = [1,2,3,4,5,10,20]
+methanol_concentrations = [1,2,3,4,5,10,20,10000]
 bib=dict()
 for i in range(len(methanol_concentrations)):
     solution = odeint(ODEs , initial_conditions , t, (methanol_concentrations[i],)) #Produces an 2d array of solutions
@@ -144,7 +144,7 @@ for i in range(len(methanol_concentrations)):
 #fig.suptitle("Variation of concentrations with time")
 #plt.show()
 
-    plt.plot(t/60, bib["Protein_{}".format(i)], label="{} nM".format(methanol_concentrations[i]))
+    plt.plot(t/60, bib["Protein_{}".format(i)], label="{} mM".format(methanol_concentrations[i]))
 
 plt.title("Effect of Methanol Concentration on Leghemoglobin Production")
 plt.xlabel("time (mins)")
