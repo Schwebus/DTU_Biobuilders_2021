@@ -12,18 +12,19 @@ import numpy as np
 
 
 #Transcription:
+# Pelechano, V., Chávez, S., & Pérez-Ortín, J. E. (2010). A complete set of nascent transcription rates for yeast genes. PloS one, 5(11), e15442.
+# average transcription rate of 0.12 molecules/min. we take a higher number as AOX promoter should be highly induced under methanol condition. in the study peroxisomal gene CIT2 was transcribed at 1 molecule/min
+# rna-seq data from phaffii reveals that it is highly transcribed; 85* higher number of reads (normalized) than average. we take 85 * 0.12 = 10.2 it seems too high. the highest observed in the pelechano study was 7.5, so 5 molecules/min might be good guess 
 
+ktx = 1/12     #M/s maximum transcription rate
 
-# Kos M, Tollervey D. Yeast pre-rRNA processing and modification occur cotranscriptionally. Mol Cell. 2010 Mar 26 37(6):809-20. doi: 10.1016/j.molcel.2010.02.024. abstract and p.811 left column 4th paragraph and p.816 table 1 & p.817 right column 5th paragraph --> 40 nt/s
-# we have 481 nucleatides for hemoglobin, so we calculate how much hemoglobin is transcribed per second
-
-ktx = 8.3e-2     #M/s maximum transcription rate
 
 # Bonven B, Gulløv K. Peptide chain elongation rate and ribosomal activity in Saccharomyces cerevisiae as a function of the growth rate. Mol Gen Genet. 1979 Feb 26 170(2):225-30
-# numer of amino acids is 481 --> (481/3)/7.5 (7.5 is "medium" value from paper for AA elongation per second) --> translation per second 
+# numer of nucleotides is 481 --> (481/3)/7.5 (7.5 is "medium" value from paper for AA elongation per second) --> translation per second 
+# Riba, A., Di Nanni, N., Mittal, N., Arhné, E., Schmidt, A., & Zavolan, M. (2019). Protein synthesis rates and ribosome occupancies reveal determinants of translation elongation rates. Proceedings of the national academy of sciences, 116(30), 15023-15032.
+# in the second paper, ribosomes per codon and protein synthesis rates are considered. it is quite clear that one can expect a ribosome every 10-100 codons. they state the AA/s rate as ranging from 1-20, so we will keep 7.5 and simulate with 5 ribosomes per transcript as a conservative guess and within their average rates. 
 
-
-ktl =  4.6e-2               #M/s maximum translation constant
+ktl =  4.6e-2*5               #M/s maximum translation constant
 
 
 #Brandon Ho et al., Comparative analysis of protein abundance studies to quantify the Saccharomyces cerevisiae proteome, bioRxiv preprint first posted online Feb. 2, 2017
@@ -94,14 +95,14 @@ def ODEs(variables, t, methanol):
 #Solving the ODEs
 #####
 t0 = 0              #Initial time
-t1 = 36000          #Final time
+t1 = 259200          #Final time/ 72 h
 total =  1000000     #Number of time steps (larger the better)
 
 initial_conditions = [0.0, 0.0]        #set the initial values for [mRNA] and [Protein]
 t = sp.linspace(t0,t1,total)                       #set the array of time values to integrate over
 
 
-methanol_concentrations = [1,2,3,4,5]
+methanol_concentrations = [1,2,3,4,5,100]
 bib=dict()
 for i in range(len(methanol_concentrations)):
     solution = odeint(ODEs , initial_conditions , t, (methanol_concentrations[i],)) #Produces an 2d array of solutions

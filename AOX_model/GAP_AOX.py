@@ -17,13 +17,15 @@ from scipy.integrate import odeint
 # we have 481 nucleatides for hemoglobin
 
 
-ktx = 8.3e-2     #M/s maximum transcription rate
+ktx = 1/12     #M/s maximum transcription rate
 
 # Bonven B, Gulløv K. Peptide chain elongation rate and ribosomal activity in Saccharomyces cerevisiae as a function of the growth rate. Mol Gen Genet. 1979 Feb 26 170(2):225-30
 # number of amino acids 481: (481/3)/7.5 (7.5 is "medium" value from paper) --> transcription rate of molecules per second
+# Riba, A., Di Nanni, N., Mittal, N., Arhné, E., Schmidt, A., & Zavolan, M. (2019). Protein synthesis rates and ribosome occupancies reveal determinants of translation elongation rates. Proceedings of the national academy of sciences, 116(30), 15023-15032.
+# in the second paper, ribosomes per codon and protein synthesis rates are considered. it is quite clear that one can expect a ribosome every 10-100 codons. they state the AA/s rate as ranging from 1-20, so we will keep 7.5 and simulate with 5 ribosomes per transcript as a conservative guess and within their average rates. 
 
 
-ktl =  4.6e-2               #M/s maximum translation constant
+ktl =  4.6e-2 * 5              #M/s maximum translation constant
 
 
 #Brandon Ho et al., Comparative analysis of protein abundance studies to quantify the Saccharomyces cerevisiae proteome, bioRxiv preprint first posted online Feb. 2, 2017
