@@ -24,7 +24,7 @@ ktx = 1/12     #M/s maximum transcription rate
 # Riba, A., Di Nanni, N., Mittal, N., Arhné, E., Schmidt, A., & Zavolan, M. (2019). Protein synthesis rates and ribosome occupancies reveal determinants of translation elongation rates. Proceedings of the national academy of sciences, 116(30), 15023-15032.
 # in the second paper, ribosomes per codon and protein synthesis rates are considered. it is quite clear that one can expect a ribosome every 10-100 codons. they state the AA/s rate as ranging from 1-20, so we will keep 7.5 and simulate with 5 ribosomes per transcript as a conservative guess and within their average rates. 
 
-ktl =  4.6e-2*5               #M/s maximum translation constant
+ktl =  4.6e-2*5              #M/s maximum translation constant
 
 
 #Brandon Ho et al., Comparative analysis of protein abundance studies to quantify the Saccharomyces cerevisiae proteome, bioRxiv preprint first posted online Feb. 2, 2017
@@ -40,6 +40,32 @@ deg_mRNA = 1.7e-4        #/s degredation constant of mRNA
 # so 5hrs = 18000s are taken ### we could look up the half life of our particular hemoglobin further
 
 deg_Protein = 1.67e-5      #/s degredation constant of Protein
+
+
+# helper function to get methanol/glucose depending on time
+
+methanol_induction = 36000
+
+methanol_induction = int(input('Time of switching to methanol (hours)\n'))*3600
+
+def methanol_time(m,t):
+    return m if t>methanol_induction else 0
+
+# Jordà, J., Jouhten, P., Cámara, E. et al. Metabolic flux profiling of recombinant protein secreting Pichia pastoris growing on glucose:methanol mixtures. Microb Cell Fact 11, 57 (2012). https://doi.org/10.1186/1475-2859-11-57
+# considering glucose consupmtion of 0.76 mmol/gDWh as observed in this paper when fed on 80%/20% methanol
+
+
+
+# as it is a molar solution concentration the cell dry weight per liter has to be taken into consideration when calculation the absolute consumption
+# here it is stated that they and others have reached dry cell weights of more than 100 g/L, we take 100
+# --> 0.76 mmol/gDWh === 76 mmol/Lh === ca. 21 nanomol/Ls 
+
+def glucose_fade(g,t):
+    elapsed = t - methanol_induction
+    return(g-elapsed*21 if (g-elapsed*21)>0 else 0)
+
+def glucose_time(g,t):
+    return g if t<methanol_induction else glucose_fade(g,t)
 
 
 ###
@@ -65,7 +91,7 @@ def ODEs(variables, t, methanol):
 
 
     Km_AOX = 200 #nM
-    methanol_concentration = methanol #mM
+    methanol_concentration = methanol_time(methanol,t) #mM
     # functionn to model to activity level of gene transcription depending on TF concentration
     #hill_eq_MXR1_vs_methanol = methanol_concentration**hill_coefficient_MXR1_methanol/(K**hill_coefficient_MXR1_methanol+methanol_concentration**hill_coefficient) #nM we can vary TF and so indirectly methanol here
     
@@ -74,27 +100,25 @@ def ODEs(variables, t, methanol):
     #Km_AOX = 3.1 #mM, alternatively 3.1 at higher O2
     hill_eq_AOX_vs_methanol = methanol_concentration**hill_coeff_AOX_methanol/(Km_AOX**hill_coeff_AOX_methanol+methanol_concentration**hill_coeff_AOX_methanol)
 
-
 # arbitrary numbers, try so that concentration is just a little above Kd (steep curve will make it big fast)
 
-    coef_repr = 100
+    coef_repr = 10
     K_repressor = 50
-    conc_repr = 0
+    conc_repr = glucose_time(2000,t)
     repressor = K_repressor**coef_repr/(K_repressor**coef_repr+conc_repr**coef_repr)
 
     leakiness = 0.0000001
 
-   
-    dTF_dt = ktx - deg_mRNA*mRNA
+
 
     # RNA
     
-    yeast_weight = 7.9e-11 # g 
+    yeast_weight = 4.6e-11 # g 
     max_Hemo = 0.05*yeast_weight/2.65686246e-20 # g molecules/yeast cell, corresponding to 10% of cell protein
     factor = 10
     bound_term = max_Hemo**factor/(max_Hemo**factor+Protein**factor)
 
-    dmRNA_dt =       leakiness + (1-leakiness)*repressor*ktx*hill_eq_AOX_vs_methanol - deg_mRNA*mRNA
+    dmRNA_dt =       leakiness*ktx + (1-leakiness)*repressor*ktx*hill_eq_AOX_vs_methanol - deg_mRNA*mRNA
     
     # Protein
  
@@ -107,12 +131,11 @@ def ODEs(variables, t, methanol):
 #Solving the ODEs
 #####
 t0 = 0              #Initial time
-t1 = 10800          #Final time/ 72 h
-total =  1000000     #Number of time steps (larger the better)
+t1 = 36000    #Final time
+total =  100000    #Number of time steps (larger the better)
 
 initial_conditions = [0.0, 0.0]        #set the initial values for [mRNA] and [Protein]
 t = sp.linspace(t0,t1,total)                       #set the array of time values to integrate over
-
 
 methanol_concentrations = [100,200,300,400,500,600,700,1000]
 bib=dict()
@@ -139,9 +162,11 @@ for i in range(len(methanol_concentrations)):
 #
 # convert # molecules Protein into grams
 
-# yeast weight: Haddad, S. A., & Lindegren, C. C. (1953). A method for determining the weight of an individual yeast cell. Applied microbiology, 1(3), 153-156.
+# yeast dry weight: https://tipbiosystems.com/wp-content/uploads/2020/05/AN102-Yeast-Cell-Count_2019_03_17.pdf
+# specifically dry weight
 
-    yeast_weight = 7.9e-11 # g 
+    yeast_weight = 4.6e-11 # g 
+
 
     Protein = Protein*2.65686246e-20*(1/yeast_weight)*1000
     bib["Protein_{}".format(i)] = Protein
@@ -155,14 +180,17 @@ for i in range(len(methanol_concentrations)):
 #axs[1].set_title("mg Protein/gDW produced over time")
 #fig.suptitle("Variation of concentrations with time")
 #plt.show()
-
-    plt.plot(t/60, bib["Protein_{}".format(i)], label="{} nM".format(methanol_concentrations[i]))
-
+    plt.plot(t/60/60, bib["Protein_{}".format(i)], label="{} nM".format(methanol_concentrations[i]))
+    #plt.show() 
+plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+plt.axvspan(0,methanol_induction/60/60,color='red',alpha=0.3)
+plt.axvspan(methanol_induction/60/60,t[-1]/60/60,color='blue',alpha=0.3)
+plt.text((methanol_induction/60/60/2)-2,2,'glucose')
+plt.text((t[-1]-methanol_induction)/60/60-2,2,'methanol')
 plt.title("Effect of Methanol Concentration on Leghemoglobin Production")
-plt.xlabel("time (mins)")
+plt.xlabel("hours")
 plt.ylabel("mg Protein/gDW")
 plt.grid()
-plt.legend()
 plt.show()
 #plt.plot(t/60 , mRNA, label = "mRNA # of molecules")
 #plt.plot(t/60 , Protein, label = "Protein # of molecules")
