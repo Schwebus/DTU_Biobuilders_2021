@@ -125,7 +125,7 @@ def ODEs(variables, t):
 #Solving the ODEs
 #####
 t0 = 0              #Initial time
-t1 = 3600000    #Final time
+t1 = 3600000000    #Final time
 total =  100000    #Number of time steps (larger the better)
 
 initial_conditions = [0.0, 0.0, 0.0, 0.0, 0.0]        #set the initial values for [mRNA] and [Protein]
@@ -144,16 +144,6 @@ methanol = solution[:,4]    #Index all values in first column
 #Plot the data
 #####
 
-#Set the parameters for the figure   (arbitrary values, varry as you like)
-#params = {
-#    'axes.labelsize':10,
-#    'font.size':15,
-#    'legend.fontsize':10,
-#    'xtick.labelsize':8,
-#    'ytick.labelsize':8,
-#    'figure.figsize': [8,8],
-#}
-#
 # convert # molecules Protein into grams
 
 # yeast dry weight: https://tipbiosystems.com/wp-content/uploads/2020/05/AN102-Yeast-Cell-Count_2019_03_17.pdf
@@ -164,25 +154,35 @@ yeast_weight = 4.6e-11 # g
 
 Protein = Protein*2.65686246e-20*(1/yeast_weight)*1000
 
-#plt.rcParams.update(params)
 ### Ploting should be made prettier, some of the plt functions dont work with figures
 fig , axs = plt.subplots(5)
-axs[0].plot(t/60 , mRNA, label = "AOX RNA")
+fig.tight_layout()
+axs[0].plot(t/60 , mRNA_GAP, label = "GAP RNA")
 axs[1].plot(t/60 , pMMO, label = "pMMO",color='red')
-axs[2].plot(t/60 , Protein, label = "Hemo",color='green')
-axs[3].plot(t/60 , mRNA_GAP, label = "GAP RNA",color='yellow')
-axs[4].plot(t/60 , methanol, label = "methanol",color='black')
-#axs[0].set_title("mRNA # of molecules/time (min)")
+axs[2].plot(t/60 , methanol, label = "meth",color='green')
+axs[3].plot(t/60 , mRNA, label = "AOX RNA",color='yellow')
+axs[4].plot(t/60 , Protein, label = "Hemo",color='black')
 #axs[1].set_title("mg Protein/gDW produced over time")
 #fig.suptitle("Variation of concentrations with time")
 fig.legend()
 plt.show()
-#plt.plot(t/60 , mRNA, label = "mRNA # of molecules")
-#plt.plot(t/60 , Protein, label = "Protein # of molecules")
-#plt.title("Variation of concentrations with time")
-#plt.xlabel("time (mins)")
-#plt.ylabel("# of molecules")
-#plt.grid()
-#plt.legend()
-#plt.show()
-#plt.save('test.png')
+
+###
+#first attempt of dynamically plotting subplotes
+###
+
+#step = 100
+#
+#
+#data = [mRNA, Protein, pMMO, mRNA_GAP, methanol]
+#sim_len = len(mRNA)
+#
+#for i in range (0, sim_len, step):
+#    axs[0].plot(t[:i]/60,data[0][:i])
+#    axs[1].plot(t[:i]/60,data[1][:i])
+#    axs[2].plot(t[:i]/60,data[2][:i])
+#    axs[3].plot(t[:i]/60,data[3][:i])
+#    axs[4].plot(t[:i]/60,data[4][:i])
+#    plt.draw()
+#    plt.pause(1e-20)
+##plt.show()
