@@ -76,12 +76,19 @@ def ODEs(variables, t, methanol):
     #variables = list of concentrations, so here, [mRNA , Protein]. t = time
     mRNA = variables[0] 
     Protein = variables[1]  #
-    #hill_coefficient_MXR1_methanol = 1.539 
-    hill_coeff_AOX_methanol = 1.539 # mxr1 and mit1, prm without competition according to Wang, X., Wang, Q., Wang, J., Bai, P., Shi, L., Shen, W., ... & Cai, M. (2016). Mit1 transcription factor mediates methanol signaling and regulates the alcohol oxidase 1 (AOX1) promoter in Pichia pastoris. Journal of Biological Chemistry, 291(12), 6245-6261.
+    #hill_coefficient_MXR1_methanol = 1.539 # coef for mrx1 binding to aox by Kumar et al. (see below) 
+    hill_coeff_AOX_methanol = 1.264 
+
     
+   # Anggiani, M., Helianti, I., & Abinawanto, A. (2018, October). Optimization of methanol induction for expression of synthetic gene Thermomyces lanuginosus lipase in Pichia pastoris. In AIP Conference Proceedings (Vol. 2023, No. 1, p. 020157). AIP Publishing LLC.
+   # they measured aox expression for methanol concentrations 0.5-3. we fitted the data read by eye (also asked for raw data) and we get a coefficient of about 1.264
+
+
     # Kumar, N. V., & Rangarajan, P. N. (2012). The zinc finger proteins Mxr1p and repressor of phosphoenolpyruvate carboxykinase (ROP) have the same DNA binding specificity but regulate methanol metabolism antagonistically in Pichia pastoris. Journal of biological chemistry, 287(41), 34465-34473.
     # this paper describes mxr1 Kd bound to AOX promoter at 200 nM
     
+    # mxr1 and mit1, prm without competition according to Wang, X., Wang, Q., Wang, J., Bai, P., Shi, L., Shen, W., ... & Cai, M. (2016). Mit1 transcription factor mediates methanol signaling and regulates the alcohol oxidase 1 (AOX1) promoter in Pichia pastoris. Journal of Biological Chemistry, 291(12), 6245-6261.
+
     # Tschopp, J. F., Brust, P. F., Cregg, J. M., Stillman, C. A., & Gingeras, T. R. (1987). Expression of the lacZ gene from two methanol-regulated promoters in Pichia pastoris. Nucleic acids research, 15(9), 3859-3876.
     # this paper uses 0.5% methanol and gives a rough time course of aox activation
     # Santoso, A., Herawati, N., & Rubiana, Y. (2012). Effect of methanol induction and incubation time on expression of human erythropoietin in methylotropic yeast Pichia pastoris. Makara Journal of Technology, 16(1), 5.
@@ -90,7 +97,7 @@ def ODEs(variables, t, methanol):
     # this paper describes the oxygen consumption rates at 3 different levels of methanol. might be a usable indirect measurement of the methanol oxidation activity and therefore AOX presence
 
 
-    Km_AOX = 200 #nM
+    Km_AOX = 58.4 #mM
     methanol_concentration = methanol_time(methanol,t) #mM
     # functionn to model to activity level of gene transcription depending on TF concentration
     #hill_eq_MXR1_vs_methanol = methanol_concentration**hill_coefficient_MXR1_methanol/(K**hill_coefficient_MXR1_methanol+methanol_concentration**hill_coefficient) #nM we can vary TF and so indirectly methanol here
@@ -131,13 +138,13 @@ def ODEs(variables, t, methanol):
 #Solving the ODEs
 #####
 t0 = 0              #Initial time
-t1 = 36000    #Final time
+t1 = 108000    #Final time
 total =  100000    #Number of time steps (larger the better)
 
 initial_conditions = [0.0, 0.0]        #set the initial values for [mRNA] and [Protein]
 t = sp.linspace(t0,t1,total)                       #set the array of time values to integrate over
 
-methanol_concentrations = [100,200,300,400,500,600,700,1000]
+methanol_concentrations = [10,50,100,200,300,400,500,1000] #mM
 bib=dict()
 for i in range(len(methanol_concentrations)):
     solution = odeint(ODEs , initial_conditions , t, (methanol_concentrations[i],)) #Produces an 2d array of solutions
@@ -180,7 +187,7 @@ for i in range(len(methanol_concentrations)):
 #axs[1].set_title("mg Protein/gDW produced over time")
 #fig.suptitle("Variation of concentrations with time")
 #plt.show()
-    plt.plot(t/60/60, bib["Protein_{}".format(i)], label="{} nM".format(methanol_concentrations[i]))
+    plt.plot(t/60/60, bib["Protein_{}".format(i)], label="{} mM".format(methanol_concentrations[i]))
     #plt.show() 
 plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 plt.axvspan(0,methanol_induction/60/60,color='red',alpha=0.3)
@@ -191,7 +198,9 @@ plt.title("Effect of Methanol Concentration on Leghemoglobin Production")
 plt.xlabel("hours")
 plt.ylabel("mg Protein/gDW")
 plt.grid()
+plt.savefig('AOX.png',bbox_inches='tight')
 plt.show()
+
 #plt.plot(t/60 , mRNA, label = "mRNA # of molecules")
 #plt.plot(t/60 , Protein, label = "Protein # of molecules")
 #plt.title("Variation of concentrations with time")

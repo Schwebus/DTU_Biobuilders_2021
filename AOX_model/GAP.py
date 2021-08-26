@@ -68,7 +68,7 @@ def ODEs(variables, t):
     # this paper describes the oxygen consumption rates at 3 different levels of methanol. might be a usable indirect measurement of the methanol oxidation activity and therefore AOX presence
 
 
-    Km_AOX = 200 #nM
+    Km_AOX = 58 #mM
     # functionn to model to activity level of gene transcription depending on TF concentration
     #hill_eq_MXR1_vs_methanol = methanol_concentration**hill_coefficient_MXR1_methanol/(K**hill_coefficient_MXR1_methanol+methanol_concentration**hill_coefficient) #nM we can vary TF and so indirectly methanol here
     
@@ -100,9 +100,9 @@ def ODEs(variables, t):
      
     # as turnover rate is about 1/s for methane -> methanol of pMMO
     yeast_per_liter = 100/yeast_weight
-    methanol_molecules = Protein_GAP*yeast_per_liter
     mole = 6.02214076e23
-    methanol = 1000*methanol_molecules/mole
+    # to get from pMMO no of molecules to mM methanol per liter fermentation solution, 
+    methanol = 1000*((Protein_GAP*yeast_per_literi)/mole)
     hill_eq_AOX_vs_methanol = methanol**hill_coeff_AOX_methanol/(Km_AOX**hill_coeff_AOX_methanol+methanol**hill_coeff_AOX_methanol)
 
     # RNA
@@ -117,7 +117,6 @@ def ODEs(variables, t):
     # Protein
  
     dProtein_dt =   bound_term*ktl*mRNA - deg_Protein*Protein
-
     return [dmRNA_dt, dProtein_dt,dmRNA_GAP_dt,dProtein_pMMO_dt,methanol] 
 
 
@@ -125,7 +124,7 @@ def ODEs(variables, t):
 #Solving the ODEs
 #####
 t0 = 0              #Initial time
-t1 = 3600000000    #Final time
+t1 = 720000    #Final time
 total =  100000    #Number of time steps (larger the better)
 
 initial_conditions = [0.0, 0.0, 0.0, 0.0, 0.0]        #set the initial values for [mRNA] and [Protein]
@@ -138,7 +137,6 @@ Protein = solution[:,1] #Index all values in second column
 mRNA_GAP = solution[:,2]    #Index all values in first column
 pMMO = solution[:,3]    #Index all values in first column
 methanol = solution[:,4]    #Index all values in first column
-
 
 #####
 #Plot the data
@@ -157,15 +155,15 @@ Protein = Protein*2.65686246e-20*(1/yeast_weight)*1000
 ### Ploting should be made prettier, some of the plt functions dont work with figures
 fig , axs = plt.subplots(5)
 fig.tight_layout()
-axs[0].plot(t/60 , mRNA_GAP, label = "GAP RNA")
-axs[1].plot(t/60 , pMMO, label = "pMMO",color='red')
-axs[2].plot(t/60 , methanol, label = "meth",color='green')
-axs[3].plot(t/60 , mRNA, label = "AOX RNA",color='yellow')
-axs[4].plot(t/60 , Protein, label = "Hemo",color='black')
+axs[0].plot(t/3600 , mRNA_GAP, label = "GAP RNA")
+axs[1].plot(t/3600 , pMMO, label = "pMMO",color='red')
+axs[2].plot(t/3600 , methanol, label = "meth",color='green')
+axs[3].plot(t/3600 , mRNA, label = "AOX RNA",color='yellow')
+axs[4].plot(t/3600 , Protein, label = "Hemo",color='black')
 #axs[1].set_title("mg Protein/gDW produced over time")
 #fig.suptitle("Variation of concentrations with time")
 fig.legend()
-plt.show()
+plt.savefig('GAP.png')
 
 ###
 #first attempt of dynamically plotting subplotes
