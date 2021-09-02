@@ -27,10 +27,12 @@ ktx = 1/12     #M/s maximum transcription rate
 ktl =  4.6e-2*5              #M/s maximum translation constant
 
 
-#Brandon Ho et al., Comparative analysis of protein abundance studies to quantify the Saccharomyces cerevisiae proteome, bioRxiv preprint first posted online Feb. 2, 2017
-# they specified typical half-life at 32 min, so we took 30 minutes=1800 seconds to calculate decay per second
+#Geisberg, Joseph V., et al. "Global analysis of mRNA isoform half-lives reveals stabilizing and destabilizing elements in yeast." Cell 156.4 (2014): 812-824.
+# half lives centered at around 20-30 minutes
 
-deg_mRNA = 1.7e-4        #/s degredation constant of mRNA
+# we take 25 minutes as half life = 1500 second = 1/1500 per second
+
+deg_mRNA = 6.7e-4        #/s degredation constant of mRNA
 
 # Christiano R, Nagaraj N, Fröhlich F, Walther TC. Global proteome turnover analyses of the Yeasts S. cerevisiae and S. pombe. Cell Rep. 2014 Dec 11 9(5):1959-65. doi: 10.1016/j.celrep.2014.10.065. Supplemental Information p.S12 table S4
 # 
@@ -81,7 +83,7 @@ def ODEs(variables, t, methanol):
 
     
    # Anggiani, M., Helianti, I., & Abinawanto, A. (2018, October). Optimization of methanol induction for expression of synthetic gene Thermomyces lanuginosus lipase in Pichia pastoris. In AIP Conference Proceedings (Vol. 2023, No. 1, p. 020157). AIP Publishing LLC.
-   # they measured aox expression for methanol concentrations 0.5-3. we fitted the data read by eye (also asked for raw data) and we get a coefficient of about 1.264
+   # they measured aox expression for methanol concentrations 0.5-3. we fit the data read by eye (also asked for raw data) and we get a coefficient of about 1.264
 
 
     # Kumar, N. V., & Rangarajan, P. N. (2012). The zinc finger proteins Mxr1p and repressor of phosphoenolpyruvate carboxykinase (ROP) have the same DNA binding specificity but regulate methanol metabolism antagonistically in Pichia pastoris. Journal of biological chemistry, 287(41), 34465-34473.
@@ -144,7 +146,7 @@ total =  100000    #Number of time steps (larger the better)
 initial_conditions = [0.0, 0.0]        #set the initial values for [mRNA] and [Protein]
 t = sp.linspace(t0,t1,total)                       #set the array of time values to integrate over
 
-methanol_concentrations = [10,50,100,200,300,400,500,1000] #mM
+methanol_concentrations = [10,50,100,200,300,400,500,1000,2000,5000] #mM
 bib=dict()
 for i in range(len(methanol_concentrations)):
     solution = odeint(ODEs , initial_conditions , t, (methanol_concentrations[i],)) #Produces an 2d array of solutions

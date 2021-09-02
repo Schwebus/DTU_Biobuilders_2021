@@ -27,10 +27,11 @@ ktx = 1/12     #M/s maximum transcription rate
 ktl =  4.6e-2*5              #M/s maximum translation constant
 ktl_pMMO = ktl*2
 
-#Brandon Ho et al., Comparative analysis of protein abundance studies to quantify the Saccharomyces cerevisiae proteome, bioRxiv preprint first posted online Feb. 2, 2017
-# they specified typical half-life at 32 min, so we took 30 minutes=1800 seconds to calculate decay per second
+# Geisberg, Joseph V., et al. "Global analysis of mRNA isoform half-lives reveals stabilizing and destabilizing elements in yeast." Cell 156.4 (2014): 812-824.
 
-deg_mRNA = 1.7e-4        #/s degredation constant of mRNA
+# mRNA half life medians usually between 20-30 minutes, we take 25 = 1500 second = 1/1500 per second
+
+deg_mRNA = 6.7e-4        #/s degredation constant of mRNA
 
 # Christiano R, Nagaraj N, Fröhlich F, Walther TC. Global proteome turnover analyses of the Yeasts S. cerevisiae and S. pombe. Cell Rep. 2014 Dec 11 9(5):1959-65. doi: 10.1016/j.celrep.2014.10.065. Supplemental Information p.S12 table S4
 # 
@@ -102,7 +103,7 @@ def ODEs(variables, t):
     yeast_per_liter = 100/yeast_weight
     mole = 6.02214076e23
     # to get from pMMO no of molecules to mM methanol per liter fermentation solution, 
-    methanol = 1000*((Protein_GAP*yeast_per_literi)/mole)
+    methanol = 1000*((Protein_GAP*yeast_per_liter)/mole)
     hill_eq_AOX_vs_methanol = methanol**hill_coeff_AOX_methanol/(Km_AOX**hill_coeff_AOX_methanol+methanol**hill_coeff_AOX_methanol)
 
     # RNA
