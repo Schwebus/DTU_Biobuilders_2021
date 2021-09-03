@@ -56,7 +56,7 @@ def ODEs(variables, t):
     Protein_GAP = variables[3]
     methanol = variables[4]
     #hill_coefficient_MXR1_methanol = 1.539 
-    hill_coeff_AOX_methanol = 1.539 # mxr1 and mit1, prm without competition according to Wang, X., Wang, Q., Wang, J., Bai, P., Shi, L., Shen, W., ... & Cai, M. (2016). Mit1 transcription factor mediates methanol signaling and regulates the alcohol oxidase 1 (AOX1) promoter in Pichia pastoris. Journal of Biological Chemistry, 291(12), 6245-6261.
+    #hill_coeff_AOX_methanol = 1.539 # mxr1 and mit1, prm without competition according to Wang, X., Wang, Q., Wang, J., Bai, P., Shi, L., Shen, W., ... & Cai, M. (2016). Mit1 transcription factor mediates methanol signaling and regulates the alcohol oxidase 1 (AOX1) promoter in Pichia pastoris. Journal of Biological Chemistry, 291(12), 6245-6261.
     
     # Kumar, N. V., & Rangarajan, P. N. (2012). The zinc finger proteins Mxr1p and repressor of phosphoenolpyruvate carboxykinase (ROP) have the same DNA binding specificity but regulate methanol metabolism antagonistically in Pichia pastoris. Journal of biological chemistry, 287(41), 34465-34473.
     # this paper describes mxr1 Kd bound to AOX promoter at 200 nM
@@ -69,10 +69,17 @@ def ODEs(variables, t):
     # this paper describes the oxygen consumption rates at 3 different levels of methanol. might be a usable indirect measurement of the methanol oxidation activity and therefore AOX presence
 
 
-    Km_AOX = 58 #mM
+    Km_AOX = 4.3 #mM
     # functionn to model to activity level of gene transcription depending on TF concentration
     #hill_eq_MXR1_vs_methanol = methanol_concentration**hill_coefficient_MXR1_methanol/(K**hill_coefficient_MXR1_methanol+methanol_concentration**hill_coefficient) #nM we can vary TF and so indirectly methanol here
-    
+   
+    hill_coeff_AOX_methanol = 1.264
+
+   # Anggiani, M., Helianti, I., & Abinawanto, A. (2018, October). Optimization of methanol induction for expression of synthetic gene Thermomyces lanuginosus lipase in Pichia pastoris. In AIP Conference Proceedings (Vol. 2023, No. 1, p. 020157). AIP Publishing LLC.
+   # they measured aox expression for methanol concentrations 0.5-3. we fit the data read by eye (also asked for raw data) and we get a coefficient of about 1.264
+
+
+
     # Couderc, R., & Baratti, J. (1980). Oxidation of methanol by the yeast, Pichia pastoris. Purification and properties of the alcohol oxidase. Agricultural and biological chemistry, 44(10), 2279-2289.
     # this paper gives 1.4 mM as methanol Km for AOX activity on 0.19 mM O2 and 3.1 mM at 0.93 mM O2
     #Km_AOX = 3.1 #mM, alternatively 3.1 at higher O2
@@ -103,7 +110,7 @@ def ODEs(variables, t):
     yeast_per_liter = 100/yeast_weight
     mole = 6.02214076e23
     # to get from pMMO no of molecules to mM methanol per liter fermentation solution, 
-    methanol = 1000*((Protein_GAP*yeast_per_liter)/mole)
+    dmethanol_dt = 1000*((Protein_GAP*yeast_per_liter)/mole)
     hill_eq_AOX_vs_methanol = methanol**hill_coeff_AOX_methanol/(Km_AOX**hill_coeff_AOX_methanol+methanol**hill_coeff_AOX_methanol)
 
     # RNA
@@ -118,14 +125,20 @@ def ODEs(variables, t):
     # Protein
  
     dProtein_dt =   bound_term*ktl*mRNA - deg_Protein*Protein
-    return [dmRNA_dt, dProtein_dt,dmRNA_GAP_dt,dProtein_pMMO_dt,methanol] 
+    
+
+    # without bound term
+    dProtein_dt =   ktl*mRNA - deg_Protein*Protein
+    
+
+    return [dmRNA_dt, dProtein_dt,dmRNA_GAP_dt,dProtein_pMMO_dt,dmethanol_dt] 
 
 
 #####
 #Solving the ODEs
 #####
 t0 = 0              #Initial time
-t1 = 720000    #Final time
+t1 = 108000    #Final time
 total =  100000    #Number of time steps (larger the better)
 
 initial_conditions = [0.0, 0.0, 0.0, 0.0, 0.0]        #set the initial values for [mRNA] and [Protein]
@@ -138,7 +151,6 @@ Protein = solution[:,1] #Index all values in second column
 mRNA_GAP = solution[:,2]    #Index all values in first column
 pMMO = solution[:,3]    #Index all values in first column
 methanol = solution[:,4]    #Index all values in first column
-
 #####
 #Plot the data
 #####

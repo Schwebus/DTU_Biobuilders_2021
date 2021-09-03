@@ -99,7 +99,7 @@ def ODEs(variables, t, methanol):
     # this paper describes the oxygen consumption rates at 3 different levels of methanol. might be a usable indirect measurement of the methanol oxidation activity and therefore AOX presence
 
 
-    Km_AOX = 58.4 #mM
+    Km_AOX = 4.3 #mM
     methanol_concentration = methanol_time(methanol,t) #mM
     # functionn to model to activity level of gene transcription depending on TF concentration
     #hill_eq_MXR1_vs_methanol = methanol_concentration**hill_coefficient_MXR1_methanol/(K**hill_coefficient_MXR1_methanol+methanol_concentration**hill_coefficient) #nM we can vary TF and so indirectly methanol here
@@ -146,7 +146,7 @@ total =  100000    #Number of time steps (larger the better)
 initial_conditions = [0.0, 0.0]        #set the initial values for [mRNA] and [Protein]
 t = sp.linspace(t0,t1,total)                       #set the array of time values to integrate over
 
-methanol_concentrations = [10,50,100,200,300,400,500,1000,2000,5000] #mM
+methanol_concentrations = [1,3,5,7,10,20] #mM
 bib=dict()
 for i in range(len(methanol_concentrations)):
     solution = odeint(ODEs , initial_conditions , t, (methanol_concentrations[i],)) #Produces an 2d array of solutions
