@@ -69,7 +69,7 @@ def ODEs(variables, t):
     # this paper describes the oxygen consumption rates at 3 different levels of methanol. might be a usable indirect measurement of the methanol oxidation activity and therefore AOX presence
 
 
-    Km_AOX = 4.3 #mM
+    Km_AOX = 0.187 #%
     # functionn to model to activity level of gene transcription depending on TF concentration
     #hill_eq_MXR1_vs_methanol = methanol_concentration**hill_coefficient_MXR1_methanol/(K**hill_coefficient_MXR1_methanol+methanol_concentration**hill_coefficient) #nM we can vary TF and so indirectly methanol here
    
@@ -98,7 +98,9 @@ def ODEs(variables, t):
     dmRNA_GAP_dt = leakiness*ktx + ktx - deg_mRNA * mRNA_GAP
 
     yeast_weight = 4.6e-11 # g 
-    max_pMMO = 0.05*yeast_weight/2.65686246e-20 # g molecules/yeast cell, corresponding to 10% of cell protein
+    # 0.05 because 10% of cell protein = 5% of total cell weight,then how many gram per liter, then divided by weight of pmmo to get max number of molecules
+    yeast_per_liter = 100/yeast_weight
+    max_pMMO = 0.05*yeast_weight*yeast_per_liter/4.981620599999999e-19# molecules/yeast cell, corresponding to 10% of cell protein
     factor = 10
     bound_term_GAP = max_pMMO**factor/(max_pMMO**factor+Protein_GAP**factor)
     
@@ -110,7 +112,12 @@ def ODEs(variables, t):
     yeast_per_liter = 100/yeast_weight
     mole = 6.02214076e23
     # to get from pMMO no of molecules to mM methanol per liter fermentation solution, 
-    dmethanol_dt = 1000*((Protein_GAP*yeast_per_liter)/mole)
+    #dmethanol_dt = 1000*((Protein_GAP*yeast_per_liter)/mole)
+    
+    # 100 for percent, 32.04 is molar mass, 792 is density, 1000 because its ml and it was calculated per liter
+    dmethanol_dt = 100*((32.04*((Protein_GAP*yeast_per_liter)/mole)/0.792)/1000)
+
+    
     hill_eq_AOX_vs_methanol = methanol**hill_coeff_AOX_methanol/(Km_AOX**hill_coeff_AOX_methanol+methanol**hill_coeff_AOX_methanol)
 
     # RNA

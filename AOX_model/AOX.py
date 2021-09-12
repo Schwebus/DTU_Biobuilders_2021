@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 import numpy as np
 
+### here a good table with protein expression yields from AOX: ###
+# https://www.elsevier.es/en-revista-brazilian-journal-microbiology-490-articulo-carbon-metabolism-influenced-for-promoters-S1517838217306901
+
 ####
 # Define constants
 ###
@@ -99,7 +102,7 @@ def ODEs(variables, t, methanol):
     # this paper describes the oxygen consumption rates at 3 different levels of methanol. might be a usable indirect measurement of the methanol oxidation activity and therefore AOX presence
 
 
-    Km_AOX = 4.3 #mM
+    Km_AOX = 0.187 #%
     methanol_concentration = methanol_time(methanol,t) #mM
     # functionn to model to activity level of gene transcription depending on TF concentration
     #hill_eq_MXR1_vs_methanol = methanol_concentration**hill_coefficient_MXR1_methanol/(K**hill_coefficient_MXR1_methanol+methanol_concentration**hill_coefficient) #nM we can vary TF and so indirectly methanol here
@@ -109,7 +112,7 @@ def ODEs(variables, t, methanol):
     #Km_AOX = 3.1 #mM, alternatively 3.1 at higher O2
     hill_eq_AOX_vs_methanol = methanol_concentration**hill_coeff_AOX_methanol/(Km_AOX**hill_coeff_AOX_methanol+methanol_concentration**hill_coeff_AOX_methanol)
 
-# arbitrary numbers, try so that concentration is just a little above Kd (steep curve will make it big fast)
+# <arbitrary numbers, try so that concentration is just a little above Kd (steep curve will make it big fast)
 
     coef_repr = 10
     K_repressor = 50
@@ -146,7 +149,7 @@ total =  100000    #Number of time steps (larger the better)
 initial_conditions = [0.0, 0.0]        #set the initial values for [mRNA] and [Protein]
 t = sp.linspace(t0,t1,total)                       #set the array of time values to integrate over
 
-methanol_concentrations = [1,3,5,7,10,20] #mM
+methanol_concentrations = [0.01,0.1,0.5,1,1.5,2,3,5] #mM
 bib=dict()
 for i in range(len(methanol_concentrations)):
     solution = odeint(ODEs , initial_conditions , t, (methanol_concentrations[i],)) #Produces an 2d array of solutions
@@ -189,7 +192,7 @@ for i in range(len(methanol_concentrations)):
 #axs[1].set_title("mg Protein/gDW produced over time")
 #fig.suptitle("Variation of concentrations with time")
 #plt.show()
-    plt.plot(t/60/60, bib["Protein_{}".format(i)], label="{} mM".format(methanol_concentrations[i]))
+    plt.plot(t/60/60, bib["Protein_{}".format(i)], label="{} %".format(methanol_concentrations[i]))
     #plt.show() 
 plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 plt.axvspan(0,methanol_induction/60/60,color='red',alpha=0.3)
